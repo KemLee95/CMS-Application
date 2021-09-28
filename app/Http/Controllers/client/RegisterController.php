@@ -10,16 +10,28 @@ use App\Http\Controllers\client\ApiHelper;
 
 class RegisterController extends ControllerBase {
   
-  public function create(Request $req) {
+  public function index(Request $req) {
     $fieldTitle = [
-
+      
     ];
-    // $res = ApiHelper::getWithoutToken($this->rootAPI);
-    return view('auth.register.index', compact("fieldTitle"));
+    return view('auth.register.index');
   }
 
-  public function store(Request $req) {
-
+  public function register(Request $req) {
     dd($req);
+    $input = $req->all();
+    $res = ApiHelper::postWithoutToken($input, $this->uriRegister);
+    if($res && $res->success) {
+      return redirect('/');
+    } else {
+
+    }
+  }
+
+  public function checkUniqueUser(Request $req) {
+    return response()-> json([
+      'success'=> true,
+      'unique' => true
+    ], 200);
   }
 }

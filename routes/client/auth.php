@@ -5,8 +5,17 @@ Route::group([
     'namespace'=> 'App\Http\Controllers\client'
 ],function() {
 
-    Route::get('/login', 'LoginController@index');
-    Route::get('/register','RegisterController@create');
+    Route::get('/', 'LoginController@index');
+    Route::get('/register','RegisterController@index');
+    Route::get('/logout', 'LoginController@logout');
+    
+    Route::post('/login', 'LoginController@login');
+    Route::post('/save', 'RegisterController@register');
 
-    Route::post('/save', 'RegisterController@store');
+    Route::group([
+        'prefix'=> 'view'
+    ], function() {
+
+        Route::post('/check-unique-user', 'RegisterController@checkUniqueUser');
+    });
 });

@@ -20,10 +20,10 @@ class ApiHelper {
 	 * @return     json    Data response after json decode
 	 */
 	public static function getWithoutToken($url) {
-        $curl = curl_init();
 
+        $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL =>$url,
+            CURLOPT_URL => env("API_URL") . $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -57,7 +57,7 @@ class ApiHelper {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => (App::environment() == 'production' ? env("API_URL_PRO") : env("API_URL")) . $url,
+            CURLOPT_URL => env("API_URL") . $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -79,11 +79,11 @@ class ApiHelper {
     }
 
     public static function postWithoutToken($iData, $url) {
-        \Log::info("postWithoutToken", ["url" => $url]);
+
         $data = http_build_query($iData);
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
+            CURLOPT_URL => env("API_URL") . $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -107,7 +107,7 @@ class ApiHelper {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => (App::environment() == 'production' ? env("API_URL_PRO") : env("API_URL")) . $url,
+            CURLOPT_URL => env("API_URL") . $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,

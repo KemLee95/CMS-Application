@@ -7,11 +7,15 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
+
+define("apiUri", "api/v1/");
+
 class ControllerBase extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $rootAPI = 'http://127.0.0.1:8000/api/v1/';
+    protected $uriLogin = apiUri . 'post/login';
+    protected $uriRegister = apiUri . 'post/register';
 
     public $user;
     public function __construct(Request $req) {
@@ -20,10 +24,15 @@ class ControllerBase extends BaseController
             return $next($req);
         });
     }
+    
     public function init($req) {
         $this->user = $req->session()->get('user_auth');
     }
-    
+
+    public function putUserInfo(Request $req, $userInfo) {
+        $req->session()->put('user_auth', $userInfo);
+    }
+
     public function getBearToken(Request $req) {
 
     }
