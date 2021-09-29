@@ -31,6 +31,7 @@
         if($('meta[name="success"]').length) {
             toastr.success($('meta[name="success"]').attr('notify'));
         }
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

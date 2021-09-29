@@ -4,7 +4,7 @@
 @stop
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6 col-md-offset-2 card p-4">
+    <div class="p-4 col-md-6 col-md-offset-2 card">
         <div class="panel panel-default">
             <div class="panel-body">
                 <form id="registerForm" action="/auth/save" class="form-horizontal" role="form" method="POST">
