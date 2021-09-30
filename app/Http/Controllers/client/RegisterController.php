@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\client\ControllerBase;
 use Illuminate\Support\Facades\Http;
-use App\Http\Controllers\client\ApiHelper;
+
+use App\Http\Controllers\helper\ApiHelper;
 
 class RegisterController extends ControllerBase {
   

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\helper\ApiHelper;
 
 use App\Http\Controllers\client\ControllerBase;
 
@@ -27,7 +28,6 @@ class LoginController extends ControllerBase {
     }
 
     if($res && !$res->success) {
- 
       $error = [];
       $error['message_title'] = $res->message_title;
       $error['message'] = $res->message;
@@ -35,9 +35,10 @@ class LoginController extends ControllerBase {
       $getSession = $req->session()->get('login_counter')->counter;
       return redirect()->back()->with(['getSession'=>$getSession, 'erro'=>$error]);
     }
-    
-    $this->putUserInfo($req, $res->user);
-    return redirect('/');
+
+    $user = $res->user;
+    $this->putUserInfo($req, $user);
+    return redirect(isset($user->url) ? $user->url: "/auth");
   }
 
   public function logout(Request $req) {
