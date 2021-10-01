@@ -18,18 +18,18 @@ class AdminController extends ControllerBase {
     $posts = [];
     $pagination = [];
     $categories = [];
-
-    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGerPostList . "?" . $iData . "&" ."paginate=5");
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGerPostList . "?" . $iData);
     if($res && $res->success) {
       $result = $res->data;
       $posts = $result->data;
       $pagination = $this->pagination($req, $result->data, $result->total ,$result->per_page, $result->current_page);
+      $categories = $res->categories;
     }
 
-    $cRes = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategories);
-    if($cRes && $cRes->success) {
-      $categories = $cRes->categories;
-    }
+    // $cRes = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategories);
+    // if($cRes && $cRes->success) {
+    //   $categories = $cRes->categories;
+    // }
     return view('admin.index', compact('fieldTitle', 'posts', 'categories', 'pagination'));
   }
 
@@ -58,5 +58,23 @@ class AdminController extends ControllerBase {
     }
 
     $this-> throwEroor($req);
+  }
+
+  public function showPost($id, Request $req) {
+
+    $post = null;
+    if(is_numeric($id) && $id !== 0) {
+      $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPostDetail. "/" .$id);
+      if($res && $res->success) {
+        $post = $res->post;
+      }
+    }
+    return view("admin.update", compact("post"));
+  }
+  public function savePost(Request $req) {
+    $input = $req->all();
+
+    $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->usiSavePost);
+
   }
 }

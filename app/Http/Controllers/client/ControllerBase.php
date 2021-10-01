@@ -25,7 +25,10 @@ class ControllerBase extends BaseController
 
     protected $uriGerPostList = apiUri . 'auth/admin/get/post-list';
     protected $uriGetCategories = apiUri . 'auth/get/categories';
-    
+    protected $usiSavePost = apiUri . 'autn/post/save';
+
+    protected $uriGetPostDetail = apiUri . 'auth/admin/get/post-detail';
+
     public $user;
     public function __construct(Request $req) {
         $this->middleware(function($req, $next){

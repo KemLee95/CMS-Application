@@ -1,7 +1,7 @@
 <nav class="mb-4 navbar navbar-default border-bottom">
   <div class="container-fluid d-flex align-items-center">
     <div class="navbar-header">
-      <a class="navbar-brand" href="">Content management system</a>
+      <a class="navbar-brand" href="">CMS</a>
     </div>
     <div class="d-flex-inline">
       <div class="nav-header">
@@ -10,7 +10,7 @@
             <strong>{{$user_auth->user_name}}</strong>
           </a>
           @if (isset($user_auth->isAdmin) && $user_auth->isAdmin)
-              <a class="btn btn-success" href="{{Request::url()}}">Create User</a>
+              <a class="btn btn-success" href="{{Request::url()}}/register">Create User</a>
           @endif
           <a href="/auth/logout" class="btn btn-warning">
             <strong>

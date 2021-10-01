@@ -4,6 +4,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
 
 <script src="/assets/js/toastr.min.js"></script>
+<script src="/assets/js/select2.min.js"></script>
+
 <script>
     $(document).ready(function(){
         toastr.options = {

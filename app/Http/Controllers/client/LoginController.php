@@ -21,24 +21,25 @@ class LoginController extends ControllerBase {
   public function login(Request $req) {
 
     $input = $req->all();
+
     $res = ApiHelper::postWithoutToken($input, $this->uriLogin);
 
     if(!isset($res)) {
       return redirect()->back();
     }
-
+    
     if($res && !$res->success) {
       $error = [];
       $error['message_title'] = $res->message_title;
       $error['message'] = $res->message;
 
       $getSession = $req->session()->get('login_counter')->counter;
-      return redirect()->back()->with(['getSession'=>$getSession, 'erro'=>$error]);
+      return redirect()->back()->with(['getSession'=>$getSession, 'error'=>$error]);
     }
 
     $user = $res->user;
     $this->putUserInfo($req, $user);
-    return redirect(isset($user->url) ? $user->url: "/auth");
+    return redirect(isset($user->url) ? $user->url:"/auth");
   }
 
   public function logout(Request $req) {
