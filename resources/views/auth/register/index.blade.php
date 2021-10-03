@@ -113,7 +113,6 @@
             });
 
             if(!isError) {
-                console.log($("#registerForm"))
                 $("#registerForm").submit()
             };
         });

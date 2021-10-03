@@ -21,15 +21,20 @@ class RegisterController extends ControllerBase {
   public function register(Request $req) {
 
     $input = $req->all();
+
     $res = ApiHelper::postWithoutToken($input, $this->uriRegister);
-    if($res && $res->success) {
-      return redirect('/auth');
+    if(!$res) {
+      $this->throwEroor();
     }
-    return response()-> json([
-      'success'=> false,
-      'message' => 'An error occurred, please contact with administrator!',
-      'message_title' => "Request failed",
-    ], 400);
+
+    if($res && $res->success) {
+      return redirect('/auth')->with("success", ["notify" => $res->message]);
+    }
+
+    $error = [];
+    $error["message"] = $res->message;
+    $error["message_title"] = $res->message_title;
+    return redirect('/auth')->with("error", $error);
   }
 
   public function checkUniqueUser(Request $req) {

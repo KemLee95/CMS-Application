@@ -7,7 +7,7 @@
     <div class="p-4 col-md-6 col-md-offset-2 card">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form id="registerForm" action="/admin/view/save" class="form-horizontal" role="form" method="POST">
+                <form id="registerForm" action="/admin/view/save-new-account" class="form-horizontal" role="form" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="username" class="col-md-4 control-label">Username</label>
@@ -36,7 +36,7 @@
                     <div>
 
                     <div class="form-group">
-                      <div class="col-6 p-0">
+                      <div class="p-0 col-6">
                         <label for="role" class="col-md-4 control-label">Role</label>
                         <select name="role_id" class="form-control">
                           @if (isset($roles) && $roles))
@@ -48,7 +48,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group mt-4">
+                    <div class="mt-4 form-group">
                         <button id="submitBtn" type="button" class="btn btn-primary w-100">
                             SignUp
                         </button>
@@ -147,7 +147,6 @@
             if(isError) return 0;
 
             if(!isError) {
-                console.log($("#registerForm"))
                 $("#registerForm").submit()
             };
         });

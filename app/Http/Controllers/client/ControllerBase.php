@@ -21,13 +21,13 @@ class ControllerBase extends BaseController
     protected $uriCheckUniqueUser = apiUri . 'post/check-unique-user';
 
     protected $uriGetRoleList = apiUri . 'auth/admin/get/role-list';
-    protected $uriAdminRegister = apiUri. 'auth/admin/post/register';
+    protected $uriGetCategoryList = apiUri . 'auth/get/category-list';
+    protected $uriGetPostDetail = apiUri . 'auth/get/post-detail';
+    protected $usiSavePost = apiUri . 'auth/post/save-post';
+    protected $uriDeletePost = apiUri . 'auth/post/delete-post';
 
-    protected $uriGerPostList = apiUri . 'auth/admin/get/post-list';
-    protected $uriGetCategories = apiUri . 'auth/get/categories';
-    protected $usiSavePost = apiUri . 'autn/post/save';
+    protected $uriGerPostList = apiUri . 'auth/get/post-list';
 
-    protected $uriGetPostDetail = apiUri . 'auth/admin/get/post-detail';
 
     public $user;
     public function __construct(Request $req) {
@@ -65,7 +65,7 @@ class ControllerBase extends BaseController
         );
     }
 
-    public function throwEroor(Request $req) {
+    public function throwEroor() {
     
         $error = [];
         $error['message']="An error occurred, please contact with administrator!";

@@ -20,9 +20,12 @@
 @stop
 @section('content')
 <div class="row justify-content-center">
-
+  <div>
+    <a class="btn btn-success" href="{{Request::url()}}">Manage Posts</a>
+    <a class="btn btn-info" href="{{Request::url()}}/accounts">Manage CMS Accounts</a>
+  </div>
   @if (isset($posts) && $posts)
-    <div class="categories row container-fluid">
+    <div class="categories row justify-content-between align-items-center container-fluid">
       <div class="col-4 form-group">
         <div>
           <label for="categories">
@@ -31,24 +34,27 @@
             </strong>
           </label>
         </div>
-        <form action="{{ Request::url()}}">
+        <form action="{{Request::url()}}">
           <div class="d-inline-flex">
             <select class="form-control" id="category_id" style="width: 100%" name="category_id">
               <option value="">Select the category</option>
               @if (isset($categories) && $categories)
                   @foreach ($categories as $category)
-                      <option value="{{isset($category->id) && $category->id ? $category->id :""}}">{{isset($category->name) && $category->name ? $category->name :""}}</option>
+                      <option {{isset($filterData["category_id"]) && ($filterData["category_id"] == $category->id) ? "selected":"" }} value="{{isset($category->id) && $category->id ? $category->id :""}}">{{isset($category->name) && $category->name ? $category->name :""}}</option>
                   @endforeach
               @endif
             </select>
-            <button type="submit" class="btn btn-info ml-2">Search</button>
+            <button type="submit" class="ml-2 btn btn-info">Search</button>
           </div>
         </form>
+      </div>
+      <div>
+        <a class="btn btn-success" href="{{Request::url()}}/post/new">Create New Post</a>
       </div>
     </div>
     <div class="container-fluid">
       @foreach ($posts as $post)
-        <div class="card bg-black border-black border-solid border-radius magrin-bt">
+        <div class="bg-black border-black border-solid card border-radius magrin-bt">
           <div class="card-header">
             <div class="row">
               <div class="col-8 text-nowrap text-truncate text-capitalize">
@@ -90,7 +96,9 @@
                           </svg>
                         </button>
                       @endif
-                      <button class="btn btn-danger ml-2">
+                      <button class="ml-2 deletePostButton btn btn-danger" {{(isset($user_auth->isAdmin) && $user_auth->isAdmin==true) || (isset($post->user_id) && $post->user_id == $user_auth->id) ? "":"disabled"}}
+                          data-post_id={{isset($post->id) && $post->id ? $post->id:""}}
+                      >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                           <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                           <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -111,6 +119,10 @@
         </div>
       @endforeach
     </div>
+    <form id="deleteForm" action="{{Request::url()}}/post/delete-post" method="POST">
+      {{ csrf_field() }}
+      <input id="deleted_post_id" type="hidden" value="">
+    </form>
   @endif
   @if (isset($pagination) && $pagination )
     <div class="paginate-item">
@@ -121,6 +133,15 @@
 @stop
 @section('foot_script')
 <script>
-
+  $(document).ready(function(){
+    $(".deletePostButton").click(function(){
+      let postId = $(this).data('post_id');
+      $("#deleted_post_id").val(postId);
+      
+      if(postId) {
+        $("#deleteForm").submit();
+      }
+    })
+  });
 </script>
 @stop

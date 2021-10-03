@@ -9,9 +9,6 @@
           <a class="btn btn-info">
             <strong>{{$user_auth->user_name}}</strong>
           </a>
-          @if (isset($user_auth->isAdmin) && $user_auth->isAdmin)
-              <a class="btn btn-success" href="{{Request::url()}}/register">Create User</a>
-          @endif
           <a href="/auth/logout" class="btn btn-warning">
             <strong>
               LogOut

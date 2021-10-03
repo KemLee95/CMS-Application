@@ -6,16 +6,24 @@ Route::group([
   'namespace'=> 'App\Http\Controllers\admin'
 ],function() {
   
-  Route::get("", 'AdminController@index');
-  Route::get("register", 'AdminController@register');
-  Route::get("post/{id}", 'AdminController@showPost');
+  Route::get("/", 'AdminHomeController@index');
 
-  Route::post('post/save', 'AdminController@savePost');
+  Route::get("/post/{id}", 'PostController@update');
+
+  Route::post('/post/save-post', 'PostController@save');
+  Route::post('/post/delete-post', 'PostController@delete');
+
+  Route::get("/account", 'AccountController@index');
+  Route::get("/account/{id}", 'AccountController@index');
+  Route::post("/save-account", 'AccountController@index');
+  Route::post("/delete-account", 'AccountController@index');
+
+
   
   Route::group([
     'prefix'=> 'view'
   ], function() {
 
-    Route::post('save', 'AdminController@save');
+    Route::post('/save-new-account', 'AdminController@saveNewAccount');
   });
 });

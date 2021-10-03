@@ -16,5 +16,5 @@
     message_title="{{ isset($error)&&isset($error['message_title']) ? $error['message_title'] : ""}}">
 @endif
 @if (isset($success))
-  <meta name="success" notify="{{ isset($success)&&isset($success['notify']) ? $success['notify'] : ""}}">
+  <meta name="success" notify="{{ isset($success) && isset($success['notify']) ? $success['notify'] : ""}}">
 @endif
