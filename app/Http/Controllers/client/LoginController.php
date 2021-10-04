@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\helper\ApiHelper;
 
-use App\Http\Controllers\client\ControllerBase;
+use App\Http\Controllers\ControllerBase;
 
 class LoginController extends ControllerBase {
   
@@ -44,6 +44,7 @@ class LoginController extends ControllerBase {
     if($req->session()->exists('user_auth')) {
       $req->session()->forget('user_auth');
     }
+
     if(strpos(url()->full(), '/logout')) {
       return redirect('/auth')->with('success', 'You have finished!');
     }

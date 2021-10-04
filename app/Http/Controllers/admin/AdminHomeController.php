@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\client\ControllerBase;
+use App\Http\Controllers\ControllerBase;
 use Illuminate\Http\Request;
 use App\Http\Controllers\helper\ApiHelper;
 

@@ -27,7 +27,8 @@
     <div class="border-black border-solid col-8 card border-radius magrin-bt">
       <form id="postsForm" action="save-post" method="POST">
         {{ csrf_field() }}
-        <input type="hidden" name="id" value={{isset($post)&& $post->id ? $post->id : ""}}>
+        <input id="post_id" type="hidden" name="id" value={{isset($post)&& $post->id ? $post->id : ""}}>
+        <input id="user_auth_id" type="hidden" value={{isset($user_auth)&& $user_auth->id ? $user_auth->id : ""}}>
         <div class="card-header">
           <div class="row form-group">
             <div class="col-12">
@@ -103,9 +104,15 @@
           </div>
         </div>
         <div class="card-body">
-          <button id="submit-button" type="btn" class="btn w-100 btn-success" 
-            {{isset($user_auth->isAdmin) && $user_auth->isAdmin || isset($user_auth->isAdmin) && $user_auth->id === $post->user_id ? "":"disabled" }}
-          >Submit</button>
+          @if (isset($user_auth) && $user_auth)
+            @if (isset($isUpdate) && $isUpdate)
+            <button id="submit-button" type="btn" class="btn w-100 btn-success" 
+              {{isset($user_auth->isAdmin) && $user_auth->isAdmin || isset($user_auth->isAdmin) && $user_auth->id === $post->user_id ? "":"disabled" }}
+            >Submit</button>
+            @else
+              <button id="submit-button" type="btn" class="btn w-100 btn-success">Submit</button>
+            @endif
+          @endif
         </div>
       </form>
     </div>
@@ -115,13 +122,23 @@
 @section('foot_script')
 <script>
   $(document).ready(function(){
+    let postId = $("#post_id").val();
+    let userAuthId = $("#user_auth_id").val();
+    
+    if(postId && userAuthId) {
+      $.ajax({
+      url: `/home/reader-tracking?post_id=${postId}`,
+      type: 'GET',
+      }).done(function(data){
+      });
+    };
+     
     $("#submit_button").click(function(event) {
       event.preventDefault();
       let title = $("#post_title").val();
       let content = $("#post_content").val();
 
-      
-      // $("#postsForm").submit();
+      $("#postsForm").submit();
     })
   });
 </script>

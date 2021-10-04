@@ -22,7 +22,7 @@
 <div class="row justify-content-center">
   <div>
     <a class="btn btn-success" href="{{Request::url()}}">Manage Posts</a>
-    <a class="btn btn-info" href="{{Request::url()}}/accounts">Manage CMS Accounts</a>
+    <a class="btn btn-info" href="{{Request::url()}}/account">Manage CMS Accounts</a>
   </div>
   @if (isset($posts) && $posts)
     <div class="categories row justify-content-between align-items-center container-fluid">
@@ -121,7 +121,7 @@
     </div>
     <form id="deleteForm" action="{{Request::url()}}/post/delete-post" method="POST">
       {{ csrf_field() }}
-      <input id="deleted_post_id" type="hidden" value="">
+      <input id="deleted_post_id" name="post_id" type="hidden" value="">
     </form>
   @endif
   @if (isset($pagination) && $pagination )

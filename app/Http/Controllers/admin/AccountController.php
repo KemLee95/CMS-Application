@@ -1,32 +1,38 @@
 <?php
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\client\ControllerBase;
+use App\Http\Controllers\ControllerBase;
 use Illuminate\Http\Request;
 use App\Http\Controllers\helper\ApiHelper;
 
-class AdminController extends ControllerBase {
+class AccountController extends ControllerBase {
   
   public function index(Request $req) {
     $input = $req->all();
     $filterData = $req->all();
     $iData = http_build_query($input);
-
     $accounts = [];
 
-    return view('acount.index', compact('filterData', 'accounts'));
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetAccountList);
+    dd($res);
+
+    return view('admin.account.index', compact('filterData', 'accounts'));
   }
 
-  public function update(Request $req) {
+  public function update($id, Request $req) {
     $input = $req->all();
     
     $roles = [];
-    $roleRes = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetRoleList);
+    if(is_numeric($id) && $id !==0) {
 
-    if(isset($roleRes) && $roleRes->success) {
-      $roles = $roleRes->roles;
+    } else {
+      $roleRes = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetRoleList);
+      if(isset($roleRes) && $roleRes->success) {
+        $roles = $roleRes->roles;
+      }
     }
-    return view('admin.register.index', compact('roles'));
+
+    return view('admin.account.index', compact('roles'));
   }
 
   public function save(Request $req) {
@@ -43,6 +49,6 @@ class AdminController extends ControllerBase {
   }
 
   public function delete(Request $req) {
-    dd(123);
+    dd($req);
   }
 }

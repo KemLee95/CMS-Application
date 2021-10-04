@@ -4,7 +4,7 @@ namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\client\ControllerBase;
+use App\Http\Controllers\ControllerBase;
 use Illuminate\Support\Facades\Http;
 
 use App\Http\Controllers\helper\ApiHelper;

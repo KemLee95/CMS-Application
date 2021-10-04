@@ -1,6 +1,6 @@
 <?php
+namespace App\Http\Controllers;
 
-namespace App\Http\Controllers\client;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -17,17 +17,21 @@ class ControllerBase extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $uriLogin = apiUri . 'post/login';
+    protected $uriLogout =apiUri . 'auth/get/logout';
+    
     protected $uriRegister = apiUri . 'post/register';
     protected $uriCheckUniqueUser = apiUri . 'post/check-unique-user';
 
     protected $uriGetRoleList = apiUri . 'auth/admin/get/role-list';
-    protected $uriGetCategoryList = apiUri . 'auth/get/category-list';
-    protected $uriGetPostDetail = apiUri . 'auth/get/post-detail';
+    protected $uriGetCategoryList = apiUri . 'get/category-list';
+    protected $uriGerPostList = apiUri . 'get/post-list';
+    protected $uriGetPostDetail = apiUri . 'get/post-detail';
     protected $usiSavePost = apiUri . 'auth/post/save-post';
     protected $uriDeletePost = apiUri . 'auth/post/delete-post';
 
-    protected $uriGerPostList = apiUri . 'auth/get/post-list';
+    protected $uriGetAccountList = apiUri . 'auth/admin/get/account-list';
 
+    protected $uriReaderTracking = apiUri . 'auth/get/reader-tracking';
 
     public $user;
     public function __construct(Request $req) {
