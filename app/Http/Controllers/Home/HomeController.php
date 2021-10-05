@@ -1,8 +1,8 @@
 <?php
-namespace App\Http\Controllers\client;
+namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\ControllerBase;
-use App\Http\Controllers\helper\ApiHelper;
+use App\Http\Controllers\ApiHelper;
 use Illuminate\Http\Request;
 
 

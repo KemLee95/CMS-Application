@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\client;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\helper\ApiHelper;
+use App\Http\Controllers\ApiHelper;
 
 use App\Http\Controllers\ControllerBase;
 

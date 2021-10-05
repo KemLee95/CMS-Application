@@ -21,6 +21,7 @@ class ControllerBase extends BaseController
     
     protected $uriRegister = apiUri . 'post/register';
     protected $uriCheckUniqueUser = apiUri . 'post/check-unique-user';
+    protected $uriUpdateUserInfo = apiUri . 'auth/post/update-user-info';
 
     protected $uriGetRoleList = apiUri . 'auth/admin/get/role-list';
     protected $uriGetCategoryList = apiUri . 'get/category-list';
@@ -32,6 +33,10 @@ class ControllerBase extends BaseController
     protected $uriGetAccountList = apiUri . 'auth/admin/get/account-list';
 
     protected $uriReaderTracking = apiUri . 'auth/get/reader-tracking';
+
+    protected $uriGetUserInfo = apiUri . 'auth/get/user-info';
+
+    protected $uriVerifiedEmail = apiUri . 'email/verification-notification';
 
     public $user;
     public function __construct(Request $req) {

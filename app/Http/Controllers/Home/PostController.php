@@ -1,9 +1,9 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\ControllerBase;
 use Illuminate\Http\Request;
-use App\Http\Controllers\helper\ApiHelper;
+use App\Http\Controllers\ApiHelper;
 
 class PostController extends ControllerBase {
   
@@ -26,7 +26,7 @@ class PostController extends ControllerBase {
         $categories = $res->categories;
       }
     }
-    return view("admin.post.update", compact("post", "categories", 'isUpdate'));
+    return view("home.post.update", compact("post", "categories", 'isUpdate'));
   }
 
   public function save(Request $req) {

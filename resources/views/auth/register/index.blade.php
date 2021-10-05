@@ -31,7 +31,7 @@
 
                     <div class="form-group">
                         <label for="re_password" class="col-md-4 control-label">Re-Password</label>
-                        <input id="password" type="password" class="form-control" name="re_password" value="">
+                        <input id="re_password" type="password" class="form-control" name="re_password" value="">
                     </div>
 
                     <div class="form-group">
@@ -54,7 +54,9 @@
             let isError = false;
             let userName = $("#user_name").val();
             let email = $("#email").val();
-
+            let password = $("#password").val();
+            let rePassword = $("#re_password").val();
+            
             if(!userName.length) {
                 toastr.warning('Warning', 'The username is required!');
                 isError = true;
@@ -112,11 +114,28 @@
                 }
             });
 
+            if(!password) {
+              toastr.warning('Warning', 'The password is required!');
+              isError = true;
+            }
+            if(isError) return 0;
+
+            if(!rePassword) {
+              toastr.warning('Warning', 'The re-password is required!');
+              isError = true;
+            }
+            if(isError) return 0;
+
+            if(password !== rePassword) {
+              toastr.warning('Warning', 'The password and comfirmation password do not match!');
+              isError = true;
+            }
+            if(isError) return 0;
+
             if(!isError) {
                 $("#registerForm").submit()
             };
         });
-
     })
 </script>
 @stop

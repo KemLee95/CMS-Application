@@ -1,9 +1,9 @@
 <?php
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\ControllerBase;
 use Illuminate\Http\Request;
-use App\Http\Controllers\helper\ApiHelper;
+use App\Http\Controllers\ApiHelper;
 
 class AccountController extends ControllerBase {
   
@@ -11,28 +11,45 @@ class AccountController extends ControllerBase {
     $input = $req->all();
     $filterData = $req->all();
     $iData = http_build_query($input);
+
     $accounts = [];
+    $pagination = [];
 
     $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetAccountList);
-    dd($res);
+    if($res && $res->success) {
+      $data = $res->data;
+      $accounts = $data->data;
+      $pagination = $this->pagination($req, $accounts, $data->total, $data->per_page, $data->current_page);
 
-    return view('admin.account.index', compact('filterData', 'accounts'));
+    }
+
+    return view('admin.account.index', compact('filterData', 'accounts', 'pagination'));
   }
 
   public function update($id, Request $req) {
-    $input = $req->all();
-    
-    $roles = [];
-    if(is_numeric($id) && $id !==0) {
 
+    $userInfo = null;
+    $roles = [];
+    $userRoles = [];
+    if(is_numeric($id)&& $id != 0) {
+      $res = ApiHelper::getWithtoken($this->getBearerToken($req), $this->uriGetUserInfo . "?user_id=". $id);
+
+      if($res && $res->success) {
+        $userInfo = $res->userInfo;
+        $roles = $res->roles;
+        $userRoles = array_map(function($role){
+          return $role->id;
+        }, $res->userInfo->roles);
+      }
     } else {
-      $roleRes = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetRoleList);
-      if(isset($roleRes) && $roleRes->success) {
-        $roles = $roleRes->roles;
+      $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetRoleList);
+      if($res && $res->success) {
+        $roles = $res->roles;
       }
     }
 
-    return view('admin.account.index', compact('roles'));
+
+    return view("auth.personal-info.update", compact("userInfo", "roles", "userRoles"));
   }
 
   public function save(Request $req) {

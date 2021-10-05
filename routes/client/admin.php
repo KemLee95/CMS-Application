@@ -3,7 +3,7 @@
 Route::group([
   'prefix'=> 'admin',
   'middleware'=> [ 'admin.auth'],
-  'namespace'=> 'App\Http\Controllers\admin'
+  'namespace'=> 'App\Http\Controllers\Admin'
 ],function() {
   
   Route::get("/", 'AdminHomeController@index');

@@ -1,9 +1,9 @@
 <?php
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\ControllerBase;
 use Illuminate\Http\Request;
-use App\Http\Controllers\helper\ApiHelper;
+use App\Http\Controllers\ApiHelper;
 
 class AdminHomeController extends ControllerBase {
   

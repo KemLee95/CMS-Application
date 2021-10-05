@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\client;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ControllerBase;
 use Illuminate\Support\Facades\Http;
 
-use App\Http\Controllers\helper\ApiHelper;
+use App\Http\Controllers\ApiHelper;
 
 class RegisterController extends ControllerBase {
   
@@ -18,7 +18,7 @@ class RegisterController extends ControllerBase {
     return view('auth.register.index');
   }
 
-  public function register(Request $req) {
+  public function save(Request $req) {
 
     $input = $req->all();
 
