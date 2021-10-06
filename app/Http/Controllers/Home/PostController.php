@@ -31,18 +31,19 @@ class PostController extends ControllerBase {
 
   public function save(Request $req) {
     $input = $req->all();
-    
+
     $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->usiSavePost);
     if($res) {
       if($res->success) {
         $success = [];
         $success['notify'] = $res->message;
-        return redirect('/admin')->with("success", $success);
+        return redirect()->back()->with("success", $success);
       }
+      
       $error = [];
       $error['message'] = $res->message;
       $error['message_title'] = $res->message_title;
-      return redirect('/admin')->with("error", $error);
+      return redirect()->back()->with("error", $error);
     }
     $this->throwError();
   }
@@ -77,6 +78,5 @@ class PostController extends ControllerBase {
         "message_title" => $res->message_title,
       ], 200);
     }
-    return $req->all();
   }
 }

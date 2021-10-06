@@ -19,7 +19,7 @@ class AdminHomeController extends ControllerBase {
     $posts = [];
     $pagination = [];
     $categories = [];
-    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGerPostList . "?" . $iData);
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPostList . "?" . $iData);
     if($res && $res->success) {
       $result = $res->pagination;
       $posts = $result->data;

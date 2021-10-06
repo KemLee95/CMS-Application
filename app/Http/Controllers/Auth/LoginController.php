@@ -50,4 +50,13 @@ class LoginController extends ControllerBase {
     }
     return redirect('/auth');
   }
+
+  public function forgotPassword(Request $req) {
+
+    return response()->json([
+      "success" => true,
+      "message" => "AFDASF",
+      "message_title" => "ADFAD"
+    ], 200);
+  }
 }

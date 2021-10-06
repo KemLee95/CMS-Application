@@ -14,16 +14,17 @@ class AccountController extends ControllerBase {
 
     $accounts = [];
     $pagination = [];
+    $startCount = 0;
 
-    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetAccountList);
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetAccountList . "?" . $iData);
     if($res && $res->success) {
       $data = $res->data;
       $accounts = $data->data;
+      $startCount = $data->per_page *($data->current_page -1);
       $pagination = $this->pagination($req, $accounts, $data->total, $data->per_page, $data->current_page);
-
     }
 
-    return view('admin.account.index', compact('filterData', 'accounts', 'pagination'));
+    return view('admin.account.index', compact('filterData', 'accounts', 'startCount','pagination'));
   }
 
   public function update($id, Request $req) {
@@ -66,6 +67,9 @@ class AccountController extends ControllerBase {
   }
 
   public function delete(Request $req) {
-    dd($req);
+    $input = $req->all();
+
+    $res = ApiHelper::postWithToken($this->getBearerToken(), $input, $this->uriDeleteAccount);
+    dd($input);
   }
 }

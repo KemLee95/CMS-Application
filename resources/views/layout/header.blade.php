@@ -1,7 +1,7 @@
 <nav class="mb-4 navbar navbar-default border-bottom">
   <div class="container-fluid d-flex align-items-center">
     <div class="navbar-header">
-      <a class="navbar-brand" href="{{isset($user_auth) && $user_auth->url ? $user_auth->url:"" }}">CMS</a>
+      <a class="navbar-brand" href="{{isset($user_auth) && $user_auth->url ? $user_auth->url : "/home" }}">CMS</a>
 
     </div>
     <div class="d-flex-inline">

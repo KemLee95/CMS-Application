@@ -20,7 +20,12 @@ class HomeController extends ControllerBase {
     $posts = [];
     $pagination = [];
     $categories = [];
-    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGerPostList . "?" . $iData);
+
+    if($req->session()->exists("user_auth")) {
+      $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPostList . "?" . $iData);
+    } else {
+      $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPublishedPostList . "?" . $iData);
+    }
     if($res && $res->success) {
       $result = $res->pagination;
       $posts = $result->data;
