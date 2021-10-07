@@ -87,12 +87,13 @@
 
                 $.ajax({
                     type: 'GET',
-                    'url': 'auth/password/reset?email='+email
+                    'url': 'auth/forgot-password?email=' + email
                 }).done(function(data){
+                    console.log(data);
                     if(data.success) {
                         toastr.success(data.message);
                     } else {
-                        toastr.error(data->message, data->message_title);
+                        toastr.error(data.message, data.message_title);
                     }
                 });
                 

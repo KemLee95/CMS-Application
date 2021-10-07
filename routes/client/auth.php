@@ -9,7 +9,9 @@ Route::group([
     Route::get('/register','RegisterController@index');
     Route::get('/logout', 'LoginController@logout');
     
-    Route::get('/password/reset', 'LoginController@forgotPassword');
+    Route::get('/forgot-password', 'LoginController@forgotPassword');
+    Route::get('/reset-password', 'LoginController@resetPassword');
+    Route::post('/reset-password/reset', 'LoginController@reset');
 
     Route::post('/login', 'LoginController@login');
     Route::post('/save', 'RegisterController@save');

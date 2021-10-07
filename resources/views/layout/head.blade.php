@@ -11,10 +11,10 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@if (isset($error))
-  <meta name="error" message="{{ isset($error)&&isset($error['message']) ? $error['message'] : ""}}"
-    message_title="{{ isset($error)&&isset($error['message_title']) ? $error['message_title'] : ""}}">
+@if (!empty(session('error')))
+  <meta name="error" message="{{ session('error')["message"] ? session('error')["message"] : ""}}"
+    message_title="{{ session('error')["message_title"] ? session('error')["message_title"] : ""}}">
 @endif
-@if (isset($success))
-  <meta name="success" notify="{{ isset($success) && isset($success['notify']) ? $success['notify'] : ""}}">
+@if (!empty(session('success')))
+  <meta name="success" message="{{ session('success')["message"] ? session('success')["message"] : ""}}">
 @endif

@@ -23,12 +23,12 @@ class RegisterController extends ControllerBase {
     $input = $req->all();
 
     $res = ApiHelper::postWithoutToken($input, $this->uriRegister);
-    if(!$res) {
-      $this->throwEroor();
-    }
-
+    
     if($res && $res->success) {
-      return redirect('/auth')->with("success", ["notify" => $res->message]);
+      $success = array(
+        "message" => $res->message
+      );
+      return redirect('/auth')->with("success", $success);
     }
 
     $error = [];

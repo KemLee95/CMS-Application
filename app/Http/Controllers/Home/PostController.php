@@ -35,8 +35,9 @@ class PostController extends ControllerBase {
     $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->usiSavePost);
     if($res) {
       if($res->success) {
-        $success = [];
-        $success['notify'] = $res->message;
+        $success = array(
+          "message" => $res->message
+        );
         return redirect()->back()->with("success", $success);
       }
       
@@ -55,7 +56,7 @@ class PostController extends ControllerBase {
     if($res) {
       if($res->success) {
         $success = [];
-        $success['notify'] = $res->message;
+        $success['message'] = $res->message;
         return redirect('/admin')->with("success", $success);
       }
 
@@ -78,5 +79,21 @@ class PostController extends ControllerBase {
         "message_title" => $res->message_title,
       ], 200);
     }
+  }
+
+  public function edited(Request $req) {
+    $input = $req->all();
+
+  //  $res = ApiHelper::getWithToken($this->getBearerToken, $this->$uriBeingEdited);
+    return response()->json([
+      "success" => true,
+      "message" => "Finished"
+    ],200);
+  }
+
+  public function editable(Request $req) {
+    $input = $req->all();
+
+  //  $res = ApiHelper::getWithToken($this->getBearerToken, $this->$uriEditablePost);
   }
 }

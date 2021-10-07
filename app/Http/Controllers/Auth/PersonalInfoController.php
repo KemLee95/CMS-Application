@@ -29,7 +29,8 @@ class PersonalInfoController extends ControllerBase {
 
     $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriUpdateUserInfo);
     if($res && $res->success) {
-      dd($res);
+      $success = array("message" => $res->message);
+      return redirect()->back()->with('success', $success);
     }
   }
 

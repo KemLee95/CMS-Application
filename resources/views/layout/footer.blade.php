@@ -31,7 +31,7 @@
         }
 
         if($('meta[name="success"]').length) {
-            toastr.success($('meta[name="success"]').attr('notify'));
+            toastr.success($('meta[name="success"]').attr('message'));
         }
         
         $.ajaxSetup({

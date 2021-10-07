@@ -27,11 +27,13 @@ class LoginController extends ControllerBase {
     if(!isset($res)) {
       $this->throwEroor();
     }
-    
     if($res && $res->success) {
       $user = $res->user;
       $this->putUserInfo($req, $user);
-      return redirect(isset($user->url) ? $user->url : "/auth");
+
+      $success = array("message" => "Login Successfully!");
+
+      return redirect(isset($user->url) ? $user->url : "/auth")->with('success', $success);
     }
 
     $error = [];
@@ -46,17 +48,47 @@ class LoginController extends ControllerBase {
     }
 
     if(strpos(url()->full(), '/logout')) {
-      return redirect('/auth')->with('success', 'You have finished!');
+      $success = array("message" => "You have finished!");
+      return redirect('/auth')->with('success', $success);
     }
     return redirect('/auth');
   }
 
   public function forgotPassword(Request $req) {
+    $input = $req->all();
 
-    return response()->json([
-      "success" => true,
-      "message" => "AFDASF",
-      "message_title" => "ADFAD"
-    ], 200);
+    $res = ApiHelper::postWithoutToken($input, $this->uriForgotPassword);
+    if($res ) {
+      return response()->json([
+        "success" => $res->success,
+        "message" => $res->message,
+      ], 200);
+    }
+  }
+
+  public function resetPassword(Request $req) {
+    $input = $req->all();
+    $token = $req->token;
+    return view("auth.reset-password.index", compact("token"));
+  }
+
+  public function reset(Request $req) {
+
+    $input = $req->all();
+    $res = ApiHelper::postWithoutToken($input, $this->uriResetPassword);
+
+    if( $res && $res->success) {
+      $success = array(
+        "message" => $res->message
+      );
+      
+      return redirect("/auth")->with("success", $success);
+    }
+    
+    $error = array(
+      "message" => $res->message,
+      "message_title"=> $res->message_title
+    );
+    return redirect("/auth")->with("error", $error);
   }
 }

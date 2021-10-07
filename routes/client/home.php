@@ -14,6 +14,9 @@ Route::group([
     'middleware' =>['app.auth']
   ], function() {
     Route::get('/reader-tracking', 'PostController@track');
+    Route::get('/posts-being-edited', 'PostController@edited');
+    Route::get('/editable-post', 'PostController@editable');
+    
     Route::post('/post/save-post', 'PostController@save');
     Route::post('/post/delete-post', 'PostController@delete');
   });

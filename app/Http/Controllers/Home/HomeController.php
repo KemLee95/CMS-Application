@@ -26,6 +26,7 @@ class HomeController extends ControllerBase {
     } else {
       $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPublishedPostList . "?" . $iData);
     }
+    
     if($res && $res->success) {
       $result = $res->pagination;
       $posts = $result->data;
