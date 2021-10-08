@@ -77,7 +77,8 @@
                   >
                     <input type="radio" value="published" name="status" class="status" autocomplete="off" 
                       {{isset($post->status) && $post->status === 'published' ? "checked":""}}
-                      {{ (isset($user_auth->isAdmin) && $user_auth->id !== $post->user_id) 
+                      {{ (isset($user_auth->isAdmin) && 
+                        ($user_auth->id !== (isset($post->user_id) && $post->user_id ? $post->user_id : false))) 
                         && (isset($post->status) && $post->status == 'draft') ? "disabled":""
                       }}
                     >
@@ -92,7 +93,8 @@
                   >
                     <input type="radio" value="unpublished" name="status" class="status" autocomplete="off" 
                       {{isset($post->status) && $post->status === 'unpublished' ? "checked":""}}
-                      {{ (isset($user_auth->isAdmin) && $user_auth->id !== $post->user_id) 
+                      {{ (isset($user_auth->isAdmin) 
+                        && ($user_auth->id !== (isset($post->user_id) && $post->user_id ? $post->user_id : false))) 
                         && (isset($post->status) && $post->status == 'draft') ? "disabled":""
                       }}
                     >
@@ -105,14 +107,24 @@
                 </div>
                 <div >
                   @if (isset($post) && $post)
-                    <strong>{{isset($post->user_name) && $post->user_name ? $post->user_name :""}}</strong>            
+                    <strong>Author: {{isset($post->user_name) && $post->user_name ? $post->user_name :""}}</strong>            
                     <span class="p-1 border-radius btn-info">{{ isset($post->updated_at) && $post->updated_at ?  date('d/m/Y', strtotime($post->updated_at)) : "" }}</span>
                   @endif
                 </div>
               </div>
             </div>
-
-          </div>
+            @if (isset($editingUser) && $editingUser)
+              <div class="py-4 col-12">
+                <span class="bg-warning">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                  </svg>
+                  <strong>Being editor by:</strong>
+                  <span>{{isset($editingUser->user_name) && $editingUser->user_name ? $editingUser->user_name : ""}}</span>
+                </span>
+              </div>
+            </div>
+            @endif
         </div>
         <div class="card-body">
           <div class="form-group">
@@ -123,7 +135,7 @@
           </div>
         </div>
         <div class="card-body">
-          @if (isset($user_auth) && $user_auth)
+          @if (isset($user_auth) && $user_auth && (!$editingUser || $editingUser->id === $user_auth->id))
             @if (isset($isUpdate) && $isUpdate)
             <button id="submit_button" type="button" class="btn w-100 btn-success" 
               {{isset($user_auth->isAdmin) && $user_auth->isAdmin || isset($user_auth->isAdmin) && $user_auth->id === $post->user_id || isset($post->status) && $post->status == 'draft' ? "":"disabled" }}
@@ -146,23 +158,18 @@
     var userAuthId = $("#user_auth_id").val();
     var status = $("input[name='status']:checked").val();
 
-    if(postId && userAuthId) {
+    if(postId && userAuthId && status !== 'draft') {
       $.ajax({
       url: `/home/reader-tracking?post_id=${postId}`,
       type: 'GET',
-      }).done(function(data){
-        
-      });
+      }).done(function(data){});
     };
     
     if(postId && userAuthId && status === 'draft') {
-      
       $.ajax({
         url: `/home/posts-being-edited?post_id=${postId}`, 
         type: 'GET',
-      }).done(function(data){
-        console.log(data);
-      });
+      }).done(function(data){});
     }
      
     $("#submit_button").click(function(event) {
@@ -202,14 +209,15 @@
       }      
     });
   });
+
   $(window).on('beforeunload', function(){
-    var postId = $("#post_id").val();
-    $.ajax({
-        url: `editable-post?post_id=${postId}`, 
-        type: 'GET',
-      }).done(function(data){
-        console.log(data);
-      });
+    if(postId && userAuthId && status === 'draft') {
+      $.ajax({
+          url: `/home/editable-post?post_id=${postId}`, 
+          type: 'GET',
+        }).done(function(data){});
+    }
   });
+
 </script>
 @stop

@@ -35,8 +35,9 @@ class ControllerBase extends BaseController
     protected $uriDeleteAccount = apiUri . 'auth/admin/post/delete-account';
 
     protected $uriReaderTracking = apiUri . 'auth/get/reader-tracking';
-    protected $uriBeingEdited = apiUri . 'auth/get/being-edited';
-    protected $uriEditablePost = apiUri . 'auth/get/editable-post';
+    protected $uriBeingEdited = apiUri . 'auth/get/posts-being-edited';
+    protected $uriEditablePost = apiUri . 'auth/get/set-editable-post';
+
     protected $uriGetUserInfo = apiUri . 'auth/get/user-info';
 
     protected $uriVerifiedEmail = apiUri . 'email/verification-notification';

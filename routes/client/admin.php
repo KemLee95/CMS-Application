@@ -8,10 +8,10 @@ Route::group([
   
   Route::get("/", 'AdminHomeController@index');
 
-  Route::get("/post/{id}", [App\Http\Controllers\PostController::class, 'update']);
+  Route::get("/post/{id}", [App\Http\Controllers\Home\PostController::class, 'update']);
 
-  Route::post('/post/save-post', [App\Http\Controllers\PostController::class, 'save']);
-  Route::post('/post/delete-post', [App\Http\Controllers\PostController::class, 'delete']);
+  Route::post('/post/save-post', [App\Http\Controllers\Home\PostController::class, 'save']);
+  Route::post('/post/delete-post', [App\Http\Controllers\Home\PostController::class, 'delete']);
 
   Route::get("/account", 'AccountController@index');
   Route::get("/account/{id}", 'AccountController@update');

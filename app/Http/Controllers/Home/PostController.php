@@ -12,21 +12,24 @@ class PostController extends ControllerBase {
     $post = null;
     $categories = [];
     $isUpdate = false;
+    $editingUser = null;
 
     if(is_numeric($id) && $id !== 0) {
       $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPostDetail. "/" .$id);
       if($res && $res->success) {
         $post = $res->post;
+        $editingUser = $post->editing_user;
         $categories = $res->categories;
         $isUpdate = true;
       }
+
     } else {
       $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategoryList);
       if($res && $res->success) {
         $categories = $res->categories;
       }
     }
-    return view("home.post.update", compact("post", "categories", 'isUpdate'));
+    return view("home.post.update", compact("post", "categories", 'isUpdate', 'editingUser'));
   }
 
   public function save(Request $req) {
@@ -84,16 +87,31 @@ class PostController extends ControllerBase {
   public function edited(Request $req) {
     $input = $req->all();
 
-  //  $res = ApiHelper::getWithToken($this->getBearerToken, $this->$uriBeingEdited);
-    return response()->json([
-      "success" => true,
-      "message" => "Finished"
-    ],200);
+   $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriBeingEdited . "?post_id=" . $req->post_id);
+   if($res && $res->success) {
+     return response()->json([
+       "success" => true,
+       "message" => $res->message
+     ], 200);
+   }
+   return response()->json([
+     "success" => false
+   ]);
+
   }
 
   public function editable(Request $req) {
     $input = $req->all();
 
-  //  $res = ApiHelper::getWithToken($this->getBearerToken, $this->$uriEditablePost);
+   $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriEditablePost . "?post_id=" . $req->post_id);
+   if($res && $res->success) {
+     return response()->json([
+       "success"=>true,
+       "message"=> $res->message
+     ]);
+   }
+   return response()->json([
+     "success" =>false
+   ]);
   }
 }

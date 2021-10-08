@@ -16,7 +16,7 @@
             </strong>
           </a>
         @else
-          <a href="/auth/" class="btn bg-primary">Sign In</a>
+          <a href="/auth/" class="btn btn-primary">Sign In</a>
           <a href="/auth/register" class="btn btn-success"> Sign Up</a>
         @endif
       </div>
