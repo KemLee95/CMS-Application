@@ -5,14 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 use View;
 
 define("apiUri", "api/v1/");
 
-class ControllerBase extends BaseController
+class ControllerBase extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 

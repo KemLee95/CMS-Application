@@ -19,15 +19,14 @@ class PostController extends ControllerBase {
       if($res && $res->success) {
         $post = $res->post;
         $editingUser = $post->editing_user;
-        $categories = $res->categories;
         $isUpdate = true;
       }
 
-    } else {
-      $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategoryList);
-      if($res && $res->success) {
-        $categories = $res->categories;
-      }
+    }
+
+    $resCate = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategoryList);
+    if($resCate && $resCate->success) {
+      $categories = $resCate->categories;
     }
     return view("home.post.update", compact("post", "categories", 'isUpdate', 'editingUser'));
   }

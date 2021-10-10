@@ -13,9 +13,7 @@ class HomeController extends ControllerBase {
     $filterData = $req->all();
     $iData = http_build_query($input);
 
-    $fieldTitle = [
-
-    ];
+    $fieldTitle = [];
     $result = [];
     $posts = [];
     $pagination = [];
@@ -30,8 +28,13 @@ class HomeController extends ControllerBase {
     if($res && $res->success) {
       $result = $res->pagination;
       $posts = $result->data;
-      $categories = $res->categories;
+      
       $pagination = $this->pagination($req, $result->data, $result->total ,$result->per_page, $result->current_page);
+    }
+    
+    $resCate = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategoryList);
+    if($resCate && $resCate->success) {
+      $categories = $resCate->categories;
     }
     return view('home.index', compact('posts', 'categories', 'filterData','pagination'));
   }

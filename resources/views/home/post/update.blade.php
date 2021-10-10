@@ -115,10 +115,8 @@
             </div>
             @if (isset($editingUser) && $editingUser)
               <div class="py-4 col-12">
-                <span class="bg-warning">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-                  </svg>
+                <span >
+                  <img style="width: 30px; height: 30px" src="/assets/images/live.png" alt="">
                   <strong>Being editor by:</strong>
                   <span>{{isset($editingUser->user_name) && $editingUser->user_name ? $editingUser->user_name : ""}}</span>
                 </span>
@@ -152,8 +150,72 @@
 @stop
 @section('foot_script')
 <script>
-  $(document).ready(function(){
+  
+  function resetEditable() {
+    var postId = $("#post_id").val();
+    var userAuthId = $("#user_auth_id").val();
+    var status = $("input[name='status']:checked").val();
+    if(postId && userAuthId && status === 'draft') {
+      $.ajax({
+          url: `/home/editable-post?post_id=${postId}`, 
+          type: 'GET',
+        }).done(function(data){
+          console.log(data);
+        });
+    }
+  };
+  
+  $(window).on('beforeunload', ()=> resetEditable());
+
+  function _timer(callback) {
+    var time = 0;
+    var state = 0;
+    var timer_id;
     
+    this.start = function(interval) {
+      interval = (typeof(interval) !== 'undefined') ? interval : 1000;
+      if(state == 0) {
+        state = 1;
+        timer_id = setInterval(function(){
+          if(time) {
+            time--;
+            if(typeof(callback) === 'function') {
+              callback(time);
+            }
+          }
+        }, interval);
+      }
+    };
+
+    this.stop = function(){
+      if(state == 1){
+        state = 0;
+        clearInterval(timer_id);
+      }
+    };
+    
+    this.reset = function(sec) {
+      sec = (typeof(sec) !== 'undefined') ? sec : 0;
+      time = sec;
+    };
+  };
+  
+  $(document).ready(function(){
+    //
+    var timer = new _timer(function(time) {
+      if(time == 0) {
+        toastr.warning('Warning', 'You do not anthing in 5 minute, The post can be edited by an others!');
+        resetEditable();
+      }
+    });
+    timer.reset(300);
+    timer.start(1000);
+
+    $("#post_content").keyup(function(){
+      timer.reset(300);
+    });
+
+    //
     var postId = $("#post_id").val();
     var userAuthId = $("#user_auth_id").val();
     var status = $("input[name='status']:checked").val();
@@ -209,15 +271,5 @@
       }      
     });
   });
-
-  $(window).on('beforeunload', function(){
-    if(postId && userAuthId && status === 'draft') {
-      $.ajax({
-          url: `/home/editable-post?post_id=${postId}`, 
-          type: 'GET',
-        }).done(function(data){});
-    }
-  });
-
 </script>
 @stop
