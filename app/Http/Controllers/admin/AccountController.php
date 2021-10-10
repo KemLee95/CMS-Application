@@ -50,26 +50,50 @@ class AccountController extends ControllerBase {
     }
 
 
-    return view("auth.personal-info.update", compact("userInfo", "roles", "userRoles"));
+    return view("admin.account.update", compact("userInfo", "roles", "userRoles"));
   }
 
   public function save(Request $req) {
     $input = $req->all();
 
-    $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriRegister);
-    if(!isset($res)) {
-      $this-> throwEroor();
+    $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriUpdateAccount);
+    if(!$res) {
+      $error = [];
+      $error['message']="An error occurred, please contact with administrator!";
+      $error['message_title']='Request failed';
+      return back()->with("error", $error);
     }
 
     if($res && $res->success) {
-      return redirect(isset($user->url) ? $user->url: "/auth");
+      $success = [];
+      $success["message"] = $res->message;
+      return redirect()->back()->with("success", $success);
     }
+    $error = [];
+    $error['message'] = $res->message;
+    $error['message_title'] = $res->message_title;
+    return redirect()->back()->with("error", $error);
   }
 
   public function delete(Request $req) {
     $input = $req->all();
 
-    $res = ApiHelper::postWithToken($this->getBearerToken(), $input, $this->uriDeleteAccount);
-    dd($input);
+    $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriDeleteAccount);
+    if(!$res) {
+      $error = [];
+      $error['message']="An error occurred, please contact with administrator!";
+      $error['message_title']='Request failed';
+      return back()->with("error", $error);
+    }
+
+    if($res && $res->success) {
+      $success = [];
+      $success["message"] = $res->message;
+      return redirect()->back()->with("success", $success);
+    }
+    $error = [];
+    $error['message'] = $res->message;
+    $error['message_title'] = $res->message_title;
+    return redirect()->back()->with("error", $error);
   }
 }

@@ -7,9 +7,6 @@
     </style>
 @stop
 @section('content')
-<div class="p-2">
-    <a href="{{Request::url()}}/new" class="btn btn-success">Create Account</a>
-</div>
 
 <div class="row justify-content-center">
     <table class="table table-striped">
@@ -52,7 +49,7 @@
                     </td>
                     <td>
                         <button class="ml-2 btn btn-danger deleteButton" data-toggle="modal" data-target="#exampleModal"
-                         {{(isset($user_auth->isAdmin) && $user_auth->isAdmin==true) || (isset($post->user_id) && $post->user_id == $user_auth->id) ? "":"disabled"}}
+                         {{(isset($account->state) && $account->state == 'disabled')  ? "disabled":""}}
                             data-user_id={{isset($account->id) && $account->id ? $account->id : ""}}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">

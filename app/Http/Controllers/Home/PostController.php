@@ -11,24 +11,28 @@ class PostController extends ControllerBase {
 
     $post = null;
     $categories = [];
-    $isUpdate = false;
+    $canUpdate = false;
     $editingUser = null;
 
     if(is_numeric($id) && $id !== 0) {
-      $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPostDetail. "/" .$id);
+      if(session()->exists("user_auth")) {
+        $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPostDetail. "/" .$id);
+      } else {
+        $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetPublishedPostDetail. "/" .$id);
+      }
       if($res && $res->success) {
         $post = $res->post;
         $editingUser = $post->editing_user;
-        $isUpdate = true;
+        $canUpdate = $res->canUpdate;
       }
-
     }
 
     $resCate = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetCategoryList);
     if($resCate && $resCate->success) {
       $categories = $resCate->categories;
     }
-    return view("home.post.update", compact("post", "categories", 'isUpdate', 'editingUser'));
+
+    return view("home.post.update", compact("post", "categories", 'canUpdate', 'editingUser'));
   }
 
   public function save(Request $req) {
@@ -59,13 +63,13 @@ class PostController extends ControllerBase {
       if($res->success) {
         $success = [];
         $success['message'] = $res->message;
-        return redirect('/admin')->with("success", $success);
+        return redirect()->back()->with("success", $success);
       }
 
       $error = [];
       $error['message'] = $res->message;
       $error['message_title'] = $res->message_title;
-      return redirect('/admin')->with("error", $error);
+      return redirect()->back()->with("error", $error);
     }
     $this->throwError();
     
@@ -74,43 +78,16 @@ class PostController extends ControllerBase {
   public function track(Request $req) {
     
     $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriReaderTracking . "?post_id=" . $req->post_id);
-    if($res && $res->success) {
-      return response() ->json([
-        "success"=> true,
-        "message" => $res->message,
-        "message_title" => $res->message_title,
-      ], 200);
-    }
   }
 
   public function edited(Request $req) {
     $input = $req->all();
 
-   $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriBeingEdited . "?post_id=" . $req->post_id);
-   if($res && $res->success) {
-     return response()->json([
-       "success" => true,
-       "message" => $res->message
-     ], 200);
-   }
-   return response()->json([
-     "success" => false
-   ]);
-
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriBeingEdited . "?post_id=" . $req->post_id);
   }
 
   public function editable(Request $req) {
     $input = $req->all();
-
-   $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriEditablePost . "?post_id=" . $req->post_id);
-   if($res && $res->success) {
-     return response()->json([
-       "success"=>true,
-       "message"=> $res->message
-     ]);
-   }
-   return response()->json([
-     "success" =>false
-   ]);
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriEditablePost . "?post_id=" . $req->post_id);
   }
 }

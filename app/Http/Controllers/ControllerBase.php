@@ -27,7 +27,8 @@ class ControllerBase extends Controller
     protected $uriGetCategoryList = apiUri . 'get/category-list';
     protected $uriGetPublishedPostList = apiUri . 'get/post-list';
     protected $uriGetPostList = apiUri . 'auth/get/post-list';
-    protected $uriGetPostDetail = apiUri . 'get/post-detail';
+    protected $uriGetPostDetail = apiUri . 'auth/get/post-detail';
+    protected $uriGetPublishedPostDetail = apiUri . 'get/published-post-detail';
     protected $usiSavePost = apiUri . 'auth/post/save-post';
     protected $uriDeletePost = apiUri . 'auth/post/delete-post';
 
@@ -43,6 +44,8 @@ class ControllerBase extends Controller
     protected $uriVerifiedEmail = apiUri . 'email/verification-notification';
     protected $uriForgotPassword = apiUri . 'forgot-password';
     protected $uriResetPassword = apiUri . 'reset-password';
+
+    protected $uriUpdateAccount = apiUri . 'auth/admin/post/update-account';
 
     public $user;
     public function __construct(Request $req) {
@@ -85,6 +88,6 @@ class ControllerBase extends Controller
         $error = [];
         $error['message']="An error occurred, please contact with administrator!";
         $error['message_title']='Request failed';
-        return back()->with(["error"=> $error]);
+        return back()->with("error", $error);
     }
 }

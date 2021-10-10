@@ -28,8 +28,9 @@
       <input id="user_auth_id" type="hidden"  value={{isset($user_auth)&& $user_auth->id ? $user_auth->id : ""}}>
       <form id="postsForm" action="save-post" method="POST">
         {{ csrf_field() }}
-        @if ($isUpdate)
+        @if ($post)
         <input id="post_id" type="hidden" name="id" value={{isset($post)&& $post->id ? $post->id : ""}}>
+        <input id="can_update" type="hidden" value={{isset($canUpdate) && $canUpdate ? $canUpdate : ""}}>
         @endif
         <div class="card-header">
           <div class="row form-group">
@@ -133,14 +134,12 @@
           </div>
         </div>
         <div class="card-body">
-          @if (isset($user_auth) && $user_auth && (!$editingUser || $editingUser->id === $user_auth->id))
-            @if (isset($isUpdate) && $isUpdate)
-            <button id="submit_button" type="button" class="btn w-100 btn-success" 
-              {{isset($user_auth->isAdmin) && $user_auth->isAdmin || isset($user_auth->isAdmin) && $user_auth->id === $post->user_id || isset($post->status) && $post->status == 'draft' ? "":"disabled" }}
-            >Submit</button>
-            @else
-              <button id="submit_button" type="button" class="btn w-100 btn-success">Submit</button>
-            @endif
+          @if (isset($canUpdate) && $canUpdate)
+          <button id="submit_button" type="button" class="btn w-100 btn-success" >
+            Update
+          </button>
+          @elseif( $user_auth &&!$post)
+            <button id="submit_button" type="button" class="btn w-100 btn-success">Save</button>
           @endif
         </div>
       </form>
@@ -154,13 +153,12 @@
   function resetEditable() {
     var postId = $("#post_id").val();
     var userAuthId = $("#user_auth_id").val();
-    var status = $("input[name='status']:checked").val();
-    if(postId && userAuthId && status === 'draft') {
+    var canUpdate = $("#can_update").val();
+
+    if(userAuthId && canUpdate) {
       $.ajax({
           url: `/home/editable-post?post_id=${postId}`, 
           type: 'GET',
-        }).done(function(data){
-          console.log(data);
         });
     }
   };
@@ -201,7 +199,7 @@
   };
   
   $(document).ready(function(){
-    //
+
     var timer = new _timer(function(time) {
       if(time == 0) {
         toastr.warning('Warning', 'You do not anthing in 5 minute, The post can be edited by an others!');
@@ -219,19 +217,20 @@
     var postId = $("#post_id").val();
     var userAuthId = $("#user_auth_id").val();
     var status = $("input[name='status']:checked").val();
+    var canUpdate = $("#can_update").val();
 
-    if(postId && userAuthId && status !== 'draft') {
+    if(postId && userAuthId && !canUpdate && status !== 'draft') {
       $.ajax({
       url: `/home/reader-tracking?post_id=${postId}`,
       type: 'GET',
-      }).done(function(data){});
-    };
+      });
+    }
     
-    if(postId && userAuthId && status === 'draft') {
+    if(userAuthId && canUpdate) {
       $.ajax({
         url: `/home/posts-being-edited?post_id=${postId}`, 
         type: 'GET',
-      }).done(function(data){});
+      });
     }
      
     $("#submit_button").click(function(event) {
@@ -240,6 +239,7 @@
 
       let categoryId = $("#category_id").val();
       let title = $("#post_title").val();
+      let status = $("input[name='status']:checked").val();
       let content = $("#post_content").val();
 
       if(!categoryId) {
@@ -254,15 +254,15 @@
       }
       if(isError) return 0;
 
-      if(!content) {
-        isError = true;
-        toastr.warning('Warning', 'The content is required!');
-      }
-      if(isError) return 0;
-
       if(!status) {
         isError = true;
         toastr.warning('Warning', 'The status is required!');
+      }
+      if(isError) return 0;
+
+      if(!content) {
+        isError = true;
+        toastr.warning('Warning', 'The content is required!');
       }
       if(isError) return 0;
 
@@ -271,5 +271,6 @@
       }      
     });
   });
+
 </script>
 @stop
