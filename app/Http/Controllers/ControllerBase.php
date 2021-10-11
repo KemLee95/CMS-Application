@@ -47,6 +47,15 @@ class ControllerBase extends Controller
 
     protected $uriUpdateAccount = apiUri . 'auth/admin/post/update-account';
 
+    protected $uriGetEventList = apiUri . 'auth/admin/get/event-list';
+    protected $uriGetEventDetail = apiUri . 'auth/admin/get/event-detail';
+
+    protected $uriGetVoucherPartial = apiUri . 'auth/admin/get/voucher-partial';
+    protected $uriGetVoucherDetail = apiUri . 'auth/admin/get/voucher-detail';
+    protected $uriGetVoucherUsers = apiUri . 'auth/admin/get/voucher-users';
+
+    protected $uriSaveEvent = apiUri . 'auth/admin/post/save-event';
+
     public $user;
     public function __construct(Request $req) {
         $this->middleware(function($req, $next){

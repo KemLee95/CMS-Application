@@ -23,6 +23,7 @@
   <div>
     <a class="btn btn-success" href="{{Request::url()}}">Manage Posts</a>
     <a class="btn btn-info" href="{{Request::url()}}/account">Manage CMS Accounts</a>
+    <a class="btn btn-warning" href="{{Request::url()}}/event">Manage CMS Events</a>
   </div>
   @if (isset($posts) && $posts)
     <div class="categories row justify-content-between align-items-center container-fluid">

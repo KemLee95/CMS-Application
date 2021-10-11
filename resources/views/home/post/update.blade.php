@@ -143,6 +143,18 @@
           @endif
         </div>
       </form>
+      @if (isset($user_auth) && $user_auth && !$user_auth->isAdmin)
+        <div class="border-top bg-black p-4">
+          <div>
+            <strong>Reduction Vouchers</strong>
+          </div>
+          <div>
+            <button class="btn btn-success" style="width: fit-content">Reduce 5%</button>
+            <button class="btn btn-info" style="width: fit-content">Reduce 10%</button>
+            <button class="btn btn-warning" style="width: fit-content">Reduce 25%</button>
+          </div>
+        </div>
+      @endif
     </div>
 </div>
 

@@ -18,10 +18,18 @@ Route::group([
   Route::post("/save-account", 'AccountController@save');
   Route::post("/delete-account", 'AccountController@delete');
   
+  Route::get("/event", 'EventController@index');
+  Route::get("/event/{id}", 'EventController@update');
+  Route::get('/get-voucher-partial', 'EventController@partial');
+  Route::post('/save-event', 'EventController@save');
+
+  Route::get('/voucher/{id}', 'VoucherController@view');
+
   Route::group([
     'prefix'=> 'view'
   ], function() {
 
     Route::post('/save-new-account', 'AdminController@saveNewAccount');
+    
   });
 });
