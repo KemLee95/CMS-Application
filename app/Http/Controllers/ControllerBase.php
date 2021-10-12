@@ -55,6 +55,11 @@ class ControllerBase extends Controller
     protected $uriGetVoucherUsers = apiUri . 'auth/admin/get/voucher-users';
 
     protected $uriSaveEvent = apiUri . 'auth/admin/post/save-event';
+    protected $uriCountEnabledEvents = apiUri . 'auth/get/count-enabled-events';
+    protected $uriGetEventPartial = apiUri . 'auth/get/event-partial';
+    protected $uriGetUsersVoucherList = apiUri . 'auth/get/users-voucher-list';
+
+    protected $uriGetVoucherForUser = apiUri . 'auth/get/voucher-for-user';
 
     public $user;
     public function __construct(Request $req) {

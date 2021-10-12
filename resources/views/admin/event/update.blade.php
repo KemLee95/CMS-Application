@@ -4,6 +4,11 @@
         .stories-card__title, .stories-card .card-title, .stories-card .card-title > a {
             max-width: 350px;
         }
+        .active {
+          color: #212529 !important;
+          background-color: #ffc107 !important;
+          border-color: #ffc107 !important;
+        }
     </style>
 @stop
 @section('content')
@@ -32,6 +37,14 @@
           <div class="form-grpup">
             <label class="card-title" for="Description">Description</label>
             <textarea id="description" name="description" cols="30" rows="10" style="width: 100%">{{isset($event) && $event->description ? $event->description : ""}}</textarea>
+          </div>
+          <div class="mt-4 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary {{isset($event->status) && $event->status == 'enabled' ? "active" : ""}} {{!$event ? "active" : ""}}">
+              <input type="radio" name="status" id="option1" autocomplete="off" {{isset($event->status) && $event->status == 'enabled' ? "checked" : ""}} {{!$event ? "checked" : ""}} value="enabled"> Enabled
+            </label>
+            <label class="btn btn-secondary {{isset($event->status) && $event->status == 'disabled' ? "active" : ""}}">
+              <input type="radio" name="status" id="option2" autocomplete="off" {{isset($event->status) && $event->status == 'disabled' ? "checked" : ""}} value="disabled"> Disabled
+            </label>
           </div>
         </div>
       </div>

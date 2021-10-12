@@ -41,7 +41,7 @@ class EventController extends ControllerBase {
 
   public function save(Request $req) {
     $input = $req->all();
-    dd($input);
+
     $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriSaveEvent);
     if($res && $res->success) {
       $success['message'] = $res->message;

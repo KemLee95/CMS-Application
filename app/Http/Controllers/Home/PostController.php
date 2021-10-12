@@ -13,6 +13,8 @@ class PostController extends ControllerBase {
     $categories = [];
     $canUpdate = false;
     $editingUser = null;
+    $avaibleEventTotal = 0;
+
 
     if(is_numeric($id) && $id !== 0) {
       if(session()->exists("user_auth")) {
@@ -24,6 +26,11 @@ class PostController extends ControllerBase {
         $post = $res->post;
         $editingUser = $post->editing_user;
         $canUpdate = $res->canUpdate;
+
+        $resEvent = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriCountEnabledEvents);
+        if($resEvent && $resEvent->success){
+          $avaibleEventTotal = $resEvent->total;
+        } 
       }
     }
 
@@ -32,7 +39,7 @@ class PostController extends ControllerBase {
       $categories = $resCate->categories;
     }
 
-    return view("home.post.update", compact("post", "categories", 'canUpdate', 'editingUser'));
+    return view("home.post.update", compact("post", "categories", 'canUpdate', 'editingUser', 'avaibleEventTotal'));
   }
 
   public function save(Request $req) {
@@ -89,5 +96,31 @@ class PostController extends ControllerBase {
   public function editable(Request $req) {
     $input = $req->all();
     $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriEditablePost . "?post_id=" . $req->post_id);
+  }
+
+  public function getEventPartial(Request $req) {
+    $input = $req->all();
+    $iParam = http_build_query($input);
+    $events = [];
+    $vouchers = [];
+    $page = $req->page;
+    
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetEventPartial . "?" . $iParam);
+    if($res && $res->success) {
+      
+      $events = $res->data->data;
+    }
+    return view("home.post.event-partial", compact("events", "page"));
+  }
+
+  public function getVoucherForUser(Request $req) {
+    $input=$req->all();
+    $iParam = http_build_query($input);
+
+    $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetVoucherForUser . "?" . $iParam);
+    if($res && $res->success) {
+      
+    }
+    return $res;
   }
 }
