@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\ApiHelper;
 use App\Http\Controllers\ControllerBase;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 
 class EventController extends ControllerBase {
@@ -42,7 +44,14 @@ class EventController extends ControllerBase {
   public function save(Request $req) {
     $input = $req->all();
 
+    $dates = array_map(function($date){
+      return Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
+    }, $input["expiry_date"]);
+
+    $input["expiry_date"] = $dates;
+
     $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriSaveEvent);
+
     if($res && $res->success) {
       $success['message'] = $res->message;
       return redirect()->back()->with("success", $success);

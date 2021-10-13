@@ -7,7 +7,6 @@
     </style>
 @stop
 @section('content')
-
 @if (isset($voucher) && $voucher)
   <div class="row justify-content-center">
       <div class="col-4">
@@ -53,7 +52,7 @@
             @if (isset($users) && $users)
               @foreach ($users as $index => $user)
                 <tr>
-                  <th scope="col">{{$index}}</th>
+                  <th scope="col">{{($index +1 + $startIndex)}}/{{isset($voucher->maximum_quantity) && $voucher->maximum_quantity ? $voucher->maximum_quantity : ""}}</th>
                   <th scope="col">
                     <a href="/auth/personal-info?user_id={{isset($user->user_id) && $user->user_id ? $user->user_id : ""}}">
                       {{isset($user->user_name) && $user->user_name ? $user->user_name : ""}}

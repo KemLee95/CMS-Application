@@ -7,7 +7,7 @@
     </th>
     <td>
       <input class="form-control percentage_decrease" type="number" name="percentage_decrease[]" min="0" max="100" step="1"
-        {{isset($voucher->users) && $voucher->users ? "disabled":""}}
+        {{isset($voucher->users) && $voucher->users ? "readonly":""}}
         value="{{isset($voucher->percentage_decrease)&&$voucher->percentage_decrease ? $voucher->percentage_decrease : ""}}"
       >
     </td>

@@ -116,9 +116,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>`
           <div class="card-body">
-            <p class="card-text">{{isset($post->content) && $post->content ? $post->content :""}}</p>
+            <p class="card-text">{{isset($post->content) && $post->content ? Str::substr($post->content, 0, 200) :""}}</p>
             <a href="{{Request::url()}}/post/{{$post->id}}" class="btn btn-primary">Go More</a>
           </div>
         </div>

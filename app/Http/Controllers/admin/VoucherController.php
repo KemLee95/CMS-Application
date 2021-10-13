@@ -14,6 +14,8 @@ class VoucherController extends ControllerBase{
     $voucher =  null;
     $users = [];
     $pagination = null;
+    $startIndex = 0;
+
     $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetVoucherDetail ."?voucher_id=" .$id);
     if($res && $res->success) {
       $voucher = $res->voucher;
@@ -21,11 +23,12 @@ class VoucherController extends ControllerBase{
       if($resUser && $resUser->success) {
         $result = $resUser->data;
         $users = $result->data;
-
+        $startIndex = $result->per_page *($result->current_page - $result->last_page);
+        
         $pagination = $this->pagination($req, $result->data, $result->total ,$result->per_page, $result->current_page);
       }
     }
-    return view("admin.voucher.index", compact("voucher", "users", "pagination"));
+    return view("admin.voucher.index", compact("voucher", "users", "pagination", "startIndex"));
   }
 
 }

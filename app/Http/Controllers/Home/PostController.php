@@ -119,8 +119,16 @@ class PostController extends ControllerBase {
 
     $res = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetVoucherForUser . "?" . $iParam);
     if($res && $res->success) {
-      
+      return response()->json([
+        "success" => true,
+        "message" => $res->message
+      ], 200);
     }
     return $res;
+    return response()->json([
+      "success" => false,
+      "message" => $res->message,
+      "message_title" => $res->message_title
+    ]);
   }
 }

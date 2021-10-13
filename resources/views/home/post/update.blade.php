@@ -23,7 +23,7 @@
 @stop
 @section('content')
 
-<div class="row {{isset($post) && $post ? "": "justify-content-center"}}">
+<div class="row {{isset($post) && $post && isset($user_auth) && $user_auth ? "": "justify-content-center"}}">
   <div class="border-black border-solid col-8 card border-radius magrin-bt">
     <input id="user_auth_id" type="hidden"  value={{isset($user_auth)&& $user_auth->id ? $user_auth->id : ""}}>
     <form id="postsForm" action="save-post" method="POST">
@@ -145,7 +145,7 @@
       </div>
     </form>
   </div>
-  @if (isset($post) && $post)
+  @if (isset($post) && $post && isset($user_auth) && $user_auth)
     <input id="events" type="hidden" value="{{isset($avaibleEventTotal) && $avaibleEventTotal ? $avaibleEventTotal : ""}}">
     <div class="col-4">
       <div class="card">
@@ -321,10 +321,12 @@
         type: 'GET',
         url: `/home/get-voucher-for-user?voucher_id=${voucherId}`
       }).done(function(data){
-        console.log(data);
+        // console.log(data);
         if(data.success) {
           let button = $(`[data-voucher_id="${voucherId}"]`);
           button.attr("disabled", true);
+          button.removeClass("btn-primary");
+          button.addClass("btn-secondary");
           toastr.success(data.message);
         } else {
           toastr.warning(data.message, data.message_title);

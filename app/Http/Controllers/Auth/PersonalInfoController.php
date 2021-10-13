@@ -8,10 +8,13 @@ use Illuminate\Http\Request;
 class PersonalInfoController extends ControllerBase {
   
   public function update(Request $req) {
+
     $id = $req->user_id;
     $userInfo = null;
     $roles = [];
     $userRoles = [];
+    $userVouchers = [];
+
     $res = ApiHelper::getWithtoken($this->getBearerToken($req), $this->uriGetUserInfo . "?user_id=". $id);
 
     if($res && $res->success) {
@@ -21,7 +24,13 @@ class PersonalInfoController extends ControllerBase {
         return $role->id;
       }, $res->userInfo->roles);
     }
-    return view("auth.personal-info.update", compact("userInfo", "roles", "userRoles"));
+
+    $resVoucher = ApiHelper::getWithToken($this->getBearerToken($req), $this->uriGetUsersVoucherList);
+    if($resVoucher && $resVoucher->success) {
+      $userVouchers = $resVoucher->data->data;
+    }
+
+    return view("auth.personal-info.update", compact("userInfo", "roles", "userRoles", "userVouchers"));
   }
   
   public function save(Request $req) {

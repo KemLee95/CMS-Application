@@ -4,87 +4,99 @@
 @stop
 @section('content')
 <div class="row justify-content-around">
-    <div class="card" style="width: 18rem; height: 25rem;">
-        <img class="card-img-top" src="" alt="">
-      </div>
-        <div class="p-4 col-md-6 col-md-offset-2 card">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <form id="registerForm" action="{{Request::url()}}/save-user" method="POST" class="form-horizontal" role="form" >
-                        <input type="hidden" name="user_id" id="user_id" value={{isset($userInfo->id) && $userInfo->id ? $userInfo->id : ""}}>
-                        {{ csrf_field() }}
-                        <div class="form-group">
-                            <label for="username" class="col-md-4 control-label">Username</label>
-                            <input id="user_name" type="text" class="form-control" name="user_name"
-                                value="{{isset($userInfo) && $userInfo->user_name ? $userInfo->user_name : ""}}"
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password" class="col-md-4 control-label">Name</label>
-                            <input  type="text" class="form-control" name="name" 
-                                value="{{isset($userInfo) && $userInfo->name ? $userInfo->name : ""}}"
-                            >
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-md-4 control-label">Email</label>
-                            <div class="d-flex">
-                                <input id="email"  type="email" class="form-control col-8" name="email"
-                                value="{{isset($userInfo) && $userInfo->email ? $userInfo->email : ""}}"
-                                >
-                                @if (isset($userInfo) && $userInfo->email_verified_at)
-                                    <button type="button" class="mx-2 col-4 btn btn-success" disabled>Verified Email</button>
-                                @else
-                                    <button type="button" id="verifyButton" class="mx-2 col-4 btn btn-success"
-                                        {{$user_auth->id == (isset($userInfo->id) && $userInfo->id ? $userInfo->id: false) ? "" : "disabled"}}
-                                    >Verify Email</button>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-                            <input id="password" type="password" class="form-control" name="password" value="">
-                        </div>
-                        <div class="form-group">
-                            <div class="p-0 col-6">
-                                <label for="role" class="col-md-4 control-label">Role</label>
-                                @if (isset($user_auth) && $user_auth->isAdmin)
-                                    <select id="role_id" name="role_id[]" class="select2 form-control" multiple>
-                                        @if (isset($roles) && $roles))
-                                            @foreach($roles as $role)
-                                                @if (in_array($role->id, $userRoles))
-                                                    <option class="text-capitalize" value="{{$role->id}}" selected >{{$role->name}}</option>
-                                                @else
-                                                <option class="text-capitalize" value="{{$role->id}}">{{$role->name}}</option>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                @else
-                                    <select id="role_id" name="role_id[]" class="select2 form-control" multiple>
-                                        @if (isset($userInfo->roles) && $userInfo->roles))
-                                            @foreach($userInfo->roles as $role)
-                                                <option class="text-capitalize" value="{{$role->id}}" selected>{{$role->name}}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="mt-4 form-group">
-                            
-                            <button id="submitBtn" type="button" class="btn btn-primary w-100">
-                                @if (isset($user_auth) && $user_auth)
-                                    Save
-                                @else
-                                    SignUp
-                                @endif
-                            </button>
-                        </div>
-                    </form>
-                </div>
+    <div class="card col-6">
+        <div class="mt-2 d-flex justify-content-center">
+            <img class="card-img-top" src="" alt="" style="width: 18rem; height: 25rem;">
+        </div>
+        <div class="mt-2">
+            <label for="your voucher"><strong>Your vouchers:</strong></label>
+            <div>
+                @foreach ($userVouchers as $voucher)
+                    <button class="m-1 btn btn-primary">
+                        Reduce {{isset($voucher->percentage_decrease) && $voucher->percentage_decrease ? $voucher->percentage_decrease : 0}} % 
+                    </button>
+                @endforeach
             </div>
         </div>
+    </div>
+    <div class="p-4 col-md-6 col-md-offset-2 card">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form id="registerForm" action="{{Request::url()}}/save-user" method="POST" class="form-horizontal" role="form" >
+                    <input type="hidden" name="user_id" id="user_id" value={{isset($userInfo->id) && $userInfo->id ? $userInfo->id : ""}}>
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label for="username" class="col-md-4 control-label">Username</label>
+                        <input id="user_name" type="text" class="form-control" name="user_name"
+                            value="{{isset($userInfo) && $userInfo->user_name ? $userInfo->user_name : ""}}"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="col-md-4 control-label">Name</label>
+                        <input  type="text" class="form-control" name="name" 
+                            value="{{isset($userInfo) && $userInfo->name ? $userInfo->name : ""}}"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-md-4 control-label">Email</label>
+                        <div class="d-flex">
+                            <input id="email"  type="email" class="form-control col-8" name="email"
+                            value="{{isset($userInfo) && $userInfo->email ? $userInfo->email : ""}}"
+                            >
+                            @if (isset($userInfo) && $userInfo->email_verified_at)
+                                <button type="button" class="mx-2 col-4 btn btn-success" disabled>Verified Email</button>
+                            @else
+                                <button type="button" id="verifyButton" class="mx-2 col-4 btn btn-success"
+                                    {{$user_auth->id == (isset($userInfo->id) && $userInfo->id ? $userInfo->id: false) ? "" : "disabled"}}
+                                >Verify Email</button>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-md-4 control-label">Password</label>
+                        <input id="password" type="password" class="form-control" name="password" value="">
+                    </div>
+                    <div class="form-group">
+                        <div class="p-0 col-6">
+                            <label for="role" class="col-md-4 control-label">Role</label>
+                            @if (isset($user_auth) && $user_auth->isAdmin)
+                                <select id="role_id" name="role_id[]" class="select2 form-control" multiple>
+                                    @if (isset($roles) && $roles))
+                                        @foreach($roles as $role)
+                                            @if (in_array($role->id, $userRoles))
+                                                <option class="text-capitalize" value="{{$role->id}}" selected >{{$role->name}}</option>
+                                            @else
+                                            <option class="text-capitalize" value="{{$role->id}}">{{$role->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </select>
+                            @else
+                                <select id="role_id" name="role_id[]" class="select2 form-control" multiple>
+                                    @if (isset($userInfo->roles) && $userInfo->roles))
+                                        @foreach($userInfo->roles as $role)
+                                            <option class="text-capitalize" value="{{$role->id}}" selected>{{$role->name}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mt-4 form-group">
+                        
+                        <button id="submitBtn" type="button" class="btn btn-primary w-100">
+                            @if (isset($user_auth) && $user_auth)
+                                Save
+                            @else
+                                SignUp
+                            @endif
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @stop
 @section('foot_script')
