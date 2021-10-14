@@ -45,17 +45,17 @@ class EventController extends ControllerBase {
     $input = $req->all();
 
     $dates = array_map(function($date){
-      return Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
+      return date('Y-m-d H:i:s', strtotime($date));
     }, $input["expiry_date"]);
 
     $input["expiry_date"] = $dates;
 
     $res = ApiHelper::postWithToken($this->getBearerToken($req), $input, $this->uriSaveEvent);
-
     if($res && $res->success) {
       $success['message'] = $res->message;
       return redirect()->back()->with("success", $success);
     }
+
     $error = array(
       "message" => $res->message,
       "message_title" => $res->message_title

@@ -11,11 +11,13 @@
     <div class="flex-wrap p-1 card-body d-flex">
       @if (isset($event->vouchers) && $event->vouchers)          
         @foreach (($event->vouchers) as $voucher)
-            <button class="m-1 btn {{count($voucher->users) || !($voucher->available_quantity) ? "btn-secondary" : "btn-primary"}} get_voucher_button" style="width: fit-content"
-              {{count($voucher->users) || !($voucher->available_quantity) ? "disabled" : ""}}
+            <button class="m-1 btn {{$voucher->isExist || !($voucher->available_quantity) ? "btn-secondary" : "btn-primary"}} get_voucher_button" style="width: fit-content"
+              {{$voucher->isExist || !($voucher->available_quantity) ? "disabled" : ""}}
               data-voucher_id="{{isset($voucher->id) && $voucher->id ? $voucher->id : "" }}"
             >
-              {{isset($voucher->available_quantity) ? $voucher->available_quantity : 0}} / {{isset($voucher->maximum_quantity) ? $voucher->maximum_quantity : 0}}
+              <strong>
+                {{isset($voucher->available_quantity) ? $voucher->available_quantity : 0}} / {{isset($voucher->maximum_quantity) ? $voucher->maximum_quantity : 0}}
+              </strong>
               Reduce {{isset($voucher->percentage_decrease) && $voucher->percentage_decrease ? $voucher->percentage_decrease : "" }}%
             </button>
         @endforeach
